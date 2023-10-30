@@ -1,0 +1,21 @@
+@use '../../styles/variables' as *;
+
+.Book {
+    width: 100%;
+    padding: 0.5em 1em;
+    border-radius: 10px;
+    box-shadow:
+        $black 0 6px 24px,
+        $secondaryBlack 0 0 0 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__Author {
+        font-size: 0.8rem;
+    }
+
+    &__Button {
+        font-size: 0.8rem;
+    }
+}
