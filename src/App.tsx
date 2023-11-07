@@ -46,6 +46,7 @@ const App: FC = observer(() => {
         </Route>,
     );
     const router = createBrowserRouter(routesConfig);
+
     return (
         <rootStoreContext.Provider value={rootStore}>
             <ThemeProvider theme={baseTheme}>

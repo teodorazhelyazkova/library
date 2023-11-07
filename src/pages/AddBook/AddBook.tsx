@@ -1,16 +1,33 @@
-import { FC } from 'react';
+import { FC, useCallback, useContext, useState } from 'react';
 import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
+import * as bookService from '../../services/bookService';
+import { useNavigate } from 'react-router-dom';
+import { CATALOG_PATH } from '../../constants/paths';
+import { rootStoreContext } from '../../App';
 import styles from './AddBook.module.scss';
 
 export const AddBook: FC = () => {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const rootStore = useContext(rootStoreContext);
+    const navigate = useNavigate();
+    const [title, setTitle] = useState<string>('');
+    const [author, setAuthor] = useState<string>('');
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            book: data.get('book'),
-            author: data.get('author'),
-        });
+
+        const newBook = await bookService.create({ title, author });
+
+        rootStore.booksStore.addBook(newBook);
+
+        navigate(CATALOG_PATH);
     };
+
+    const titleChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value);
+    }, []);
+
+    const authorChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setAuthor(e.target.value);
+    }, []);
 
     return (
         <Container component='main' maxWidth='xs'>
@@ -21,16 +38,21 @@ export const AddBook: FC = () => {
                 <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <TextField required fullWidth id='book' label='Book' name='book' />
+                            <TextField
+                                required
+                                fullWidth
+                                label='Book'
+                                value={title}
+                                onChange={titleChangeHandler}
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 required
                                 fullWidth
-                                name='author'
                                 label='Author'
-                                type='author'
-                                id='author'
+                                value={author}
+                                onChange={authorChangeHandler}
                             />
                         </Grid>
                     </Grid>

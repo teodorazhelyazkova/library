@@ -6,7 +6,7 @@ import styles from './Home.module.scss';
 export const Home: FC = observer(() => {
     return (
         <section className={styles.Home}>
-            <Typography variant='h1'>Welcome to the Library!</Typography>;
+            <Typography variant='h2'>Welcome to the Library!</Typography>
         </section>
     );
 });

@@ -1,32 +1,25 @@
 import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
-import { RemoveButton } from '../../components/RemoveButton/RemoveButton';
+import { DeleteButton } from '../../components/DeleteButton/DeleteButton';
 import { EDIT_PATH } from '../../constants/paths';
+import { useContext } from 'react';
+import { rootStoreContext } from '../../App';
 import styles from './Book.module.scss';
-
-const books = [
-    {
-        id: 'd953e5fb-a585-4d6b-92d3-ee90697398a0',
-        author: 'J.K.Rowling',
-        title: "Harry Potter and the Philosopher's Stone",
-    },
-    {
-        id: 'd953e5fb-a585-4d6b-92d3-ee90697398a1',
-        author: 'Svetlin Nakov',
-        title: 'C# Fundamentals',
-    },
-];
+import { Typography } from '@mui/material';
 
 export const Book = () => {
-    const params = useParams();
-    const bookDetails = books.find((book) => params.id === book.id)!;
+    const rootStore = useContext(rootStoreContext);
+    const params = useParams<{ id: string }>();
+    const bookDetails = rootStore.booksStore.books.find((book) => params.id === book.id)!;
 
     return (
         <div className={styles.Book}>
-            <h1>{bookDetails.title}</h1>
+            <Typography variant='h3' sx={{ textAlign: 'center' }}>
+                {bookDetails.title}
+            </Typography>
             <p className={styles.Book__Author}>{bookDetails.author}</p>
             <div className={styles.Book__Buttons}>
-                <RemoveButton id={bookDetails.id} />
+                <DeleteButton id={bookDetails.id} />
                 <Link
                     to={`${EDIT_PATH}/${bookDetails.id}`}
                     className={classNames('button', styles.Book__EditButton)}

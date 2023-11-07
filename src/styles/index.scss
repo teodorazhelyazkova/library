@@ -4,9 +4,9 @@
 .button {
     font-weight: 700;
     cursor: pointer;
-    padding: 0.55em 1.25em;
+    padding: 0.55rem 1.25rem;
     background-color: transparent;
-    border: 2px $lightPink solid;
+    border: 2px $blue solid;
     border-radius: 12px;
     display: flex;
     align-self: center;
@@ -16,5 +16,5 @@
     width: 30%;
     display: flex;
     justify-content: flex-end;
-    gap: 1em;
+    gap: 1rem;
 }
