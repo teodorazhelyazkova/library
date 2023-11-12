@@ -16,6 +16,8 @@ export class BooksStore {
             deleteBook: action.bound,
             addToMyBookList: action.bound,
             removeFromMyBookList: action.bound,
+            editBook: action.bound,
+            setBook: action.bound,
         });
 
         autorun(() => this.initializeStoreData());
@@ -29,12 +31,21 @@ export class BooksStore {
         this.books = books;
     }
 
+    public setBook(book: IBook, index: number) {
+        this.books[index] = { ...book };
+    }
+
     public addBook(book: IBook) {
         this.books.push(book);
     }
 
+    public editBook(bookData: IBook) {
+        const bookIndex = this.books.findIndex((book) => book._id === bookData._id);
+        this.setBook(bookData, bookIndex);
+    }
+
     public deleteBook(bookId: string) {
-        this.books = this.books.filter((book) => book.id !== bookId);
+        this.books = this.books.filter((book) => book._id !== bookId);
     }
 
     public async fetchBooks() {
@@ -46,7 +57,7 @@ export class BooksStore {
     }
 
     public addToMyBookList(item: IBook) {
-        const existingBook = this.myBookList.find((book: IBook) => book.id === item.id);
+        const existingBook = this.myBookList.find((book: IBook) => book._id === item._id);
 
         if (existingBook) {
             return;
@@ -56,6 +67,6 @@ export class BooksStore {
     }
 
     public removeFromMyBookList(bookId: string) {
-        this.myBookList = this.myBookList.filter((book: IBook) => book.id !== bookId);
+        this.myBookList = this.myBookList.filter((book: IBook) => book._id !== bookId);
     }
 }

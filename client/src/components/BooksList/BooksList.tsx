@@ -14,7 +14,7 @@ export const BooksList: FC<IBooksListProps> = ({ books, noResultsText }) => {
             {!books.length ? (
                 <Typography variant='h5'>{noResultsText}</Typography>
             ) : (
-                books.map((book: IBook) => <BookItem book={book} key={book.id} />)
+                books.map((book: IBook) => <BookItem book={book} key={`book-${book._id}`} />)
             )}
         </section>
     );

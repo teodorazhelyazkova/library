@@ -1,32 +1,51 @@
-import { FC } from 'react';
+import { FC, useContext, useRef, useState } from 'react';
 import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
+import * as bookService from '../../services/bookService';
 import styles from './EditBook.module.scss';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { rootStoreContext } from '../../App';
+import { CATALOG_PATH } from '../../constants/paths';
 
-const books = [
-    {
-        id: 'd953e5fb-a585-4d6b-92d3-ee90697398a0',
-        author: 'J.K.Rowling',
-        title: "Harry Potter and the Philosopher's Stone",
-    },
-    {
-        id: 'd953e5fb-a585-4d6b-92d3-ee90697398a1',
-        author: 'Svetlin Nakov',
-        title: 'C# Fundamentals',
-    },
-];
-
-export const EditBook: FC = () => {
+export const EditBook: FC = observer(() => {
+    const rootStore = useContext(rootStoreContext);
+    const navigate = useNavigate();
     const params = useParams();
-    const bookDetails = books.find((book) => params.id === book.id)!;
+    const titleRef = useRef<HTMLInputElement>();
+    const authorRef = useRef<HTMLInputElement>();
+    const [titleError, setTitleError] = useState<boolean>(false);
+    const [authorError, setAuthorError] = useState<boolean>(false);
+    const bookDetails = rootStore.booksStore.books.find((book) => params.id === book._id)!;
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            book: data.get('book'),
-            author: data.get('author'),
-        });
+        setTitleError(false);
+        setAuthorError(false);
+
+        const title = titleRef?.current?.value;
+        const author = authorRef?.current?.value;
+
+        if (title === '' && author === '') {
+            setTitleError(true);
+            setAuthorError(true);
+        } else if (title && title.length < 2) {
+            setTitleError(true);
+        } else if (author && author.length < 4) {
+            setAuthorError(true);
+        } else if (title && author) {
+            const updatedBook = await bookService.edit({
+                _id: bookDetails._id,
+                title,
+                author,
+                creator: bookDetails.creator,
+            });
+
+            rootStore.booksStore.editBook(updatedBook);
+
+            localStorage.setItem(updatedBook._id, rootStore.authStore.userEmail!);
+
+            navigate(`${CATALOG_PATH}/${params.id}`);
+        }
     };
 
     return (
@@ -45,7 +64,10 @@ export const EditBook: FC = () => {
                                 id='book'
                                 label='Book'
                                 name='book'
+                                inputRef={titleRef}
                                 defaultValue={bookDetails.title}
+                                error={titleError}
+                                helperText={titleError ? 'Title must be at least 2 characters' : ''}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -57,7 +79,12 @@ export const EditBook: FC = () => {
                                 label='Author'
                                 type='author'
                                 id='author'
+                                inputRef={authorRef}
                                 defaultValue={bookDetails.author}
+                                error={authorError}
+                                helperText={
+                                    authorError ? 'Author must be at least 4 characters' : ''
+                                }
                             />
                         </Grid>
                     </Grid>
@@ -68,4 +95,4 @@ export const EditBook: FC = () => {
             </Box>
         </Container>
     );
-};
+});

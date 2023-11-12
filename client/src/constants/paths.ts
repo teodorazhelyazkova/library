@@ -8,11 +8,7 @@ export const ADD_BOOK_PATH = '/add-book';
 export const EDIT_PATH = '/edit-book';
 export const EDIT_BOOK_PATH = '/edit-book/:id';
 
-export const pageNamesAndPaths = [
+export const publicPageNamesAndPaths = [
     { name: 'Home', path: HOME_PATH },
     { name: 'Catalog', path: CATALOG_PATH },
-    { name: 'My List', path: MY_LIST_PATH },
-    { name: 'Add Book', path: ADD_BOOK_PATH },
-    { name: 'Login', path: LOGIN_PATH },
-    { name: 'Register', path: REGISTER_PATH },
 ];

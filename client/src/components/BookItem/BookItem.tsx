@@ -2,7 +2,6 @@ import { FC, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { CATALOG_PATH } from '../../constants/paths';
-import { DeleteButton } from '../DeleteButton/DeleteButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { IconButton, Typography } from '@mui/material';
@@ -11,9 +10,10 @@ import { rootStoreContext } from '../../App';
 import { observer } from 'mobx-react-lite';
 
 export interface IBook {
-    id: string;
+    _id: string;
     author: string;
     title: string;
+    creator: string;
 }
 
 interface IBookItemProps {
@@ -23,39 +23,39 @@ interface IBookItemProps {
 export const BookItem: FC<IBookItemProps> = observer(({ book }: IBookItemProps) => {
     const rootStore = useContext(rootStoreContext);
     const isInMyBookList = rootStore.booksStore.myBookList.some(
-        (item: IBook) => item.id === book.id,
+        (item: IBook) => item._id === book._id,
     );
     const handleAddToBookList = () => {
         if (!isInMyBookList) {
             rootStore.booksStore.addToMyBookList(book);
-            console.log('add');
         } else {
-            rootStore.booksStore.removeFromMyBookList(book.id);
-            console.log('remove');
+            rootStore.booksStore.removeFromMyBookList(book._id);
         }
     };
+    const isCreator = book.creator === rootStore.authStore.userEmail;
 
     return (
-        <div id={book.id} className={styles.Book}>
+        <div id={book._id} className={styles.Book}>
             <p className={styles.Book__Author}>{book.author}</p>
             <Typography variant='body1' sx={{ fontWeight: 'bold' }}>
                 {book.title}
             </Typography>
             <div className='buttons-container'>
-                <IconButton onClick={handleAddToBookList}>
-                    {isInMyBookList ? (
-                        <FavoriteIcon color='error' />
-                    ) : (
-                        <FavoriteBorderIcon color='error' />
-                    )}
-                </IconButton>
+                {rootStore.authStore.isAuthorized && !isCreator && (
+                    <IconButton onClick={handleAddToBookList}>
+                        {isInMyBookList ? (
+                            <FavoriteIcon color='error' />
+                        ) : (
+                            <FavoriteBorderIcon color='error' />
+                        )}
+                    </IconButton>
+                )}
                 <Link
-                    to={`${CATALOG_PATH}/${book.id}`}
+                    to={`${CATALOG_PATH}/${book._id}`}
                     className={classNames('button', styles.Book__Button)}
                 >
                     Details
                 </Link>
-                <DeleteButton id={book.id} />
             </div>
         </div>
     );

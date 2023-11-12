@@ -5,20 +5,41 @@ import { useNavigate } from 'react-router-dom';
 import { CATALOG_PATH } from '../../constants/paths';
 import { rootStoreContext } from '../../App';
 import styles from './AddBook.module.scss';
+import { observer } from 'mobx-react-lite';
 
-export const AddBook: FC = () => {
+export const AddBook: FC = observer(() => {
     const rootStore = useContext(rootStoreContext);
     const navigate = useNavigate();
     const [title, setTitle] = useState<string>('');
     const [author, setAuthor] = useState<string>('');
+    const [titleError, setTitleError] = useState<boolean>(false);
+    const [authorError, setAuthorError] = useState<boolean>(false);
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setTitleError(false);
+        setAuthorError(false);
 
-        const newBook = await bookService.create({ title, author });
+        if (title === '' && author === '') {
+            setTitleError(true);
+            setAuthorError(true);
+        } else if (title.length < 2) {
+            setTitleError(true);
+        } else if (author.length < 4) {
+            setAuthorError(true);
+        } else {
+            const newBook = await bookService.create({
+                title,
+                author,
+                creator: rootStore.authStore.userEmail!,
+            });
 
-        rootStore.booksStore.addBook(newBook);
+            rootStore.booksStore.addBook(newBook);
 
-        navigate(CATALOG_PATH);
+            localStorage.setItem(newBook._id, rootStore.authStore.userEmail!);
+
+            navigate(CATALOG_PATH);
+        }
     };
 
     const titleChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +65,8 @@ export const AddBook: FC = () => {
                                 label='Book'
                                 value={title}
                                 onChange={titleChangeHandler}
+                                error={titleError}
+                                helperText={titleError ? 'Title must be at least 2 characters' : ''}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -53,6 +76,10 @@ export const AddBook: FC = () => {
                                 label='Author'
                                 value={author}
                                 onChange={authorChangeHandler}
+                                error={authorError}
+                                helperText={
+                                    authorError ? 'Author must be at least 4 characters' : ''
+                                }
                             />
                         </Grid>
                     </Grid>
@@ -63,4 +90,4 @@ export const AddBook: FC = () => {
             </Box>
         </Container>
     );
-};
+});
