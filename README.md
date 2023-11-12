@@ -28,8 +28,10 @@ $ npm start
 
 -   React
 -   React Router Dom
+-   TypeScript
 -   MobX
 -   Firebase
 -   Axios
 -   Material UI
 -   Sass
+-   Vite
