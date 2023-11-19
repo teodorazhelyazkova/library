@@ -47,8 +47,8 @@ npm start
 - TypeScript
 - MobX
 - Firebase
-- Axios
 - Material UI
 - Sass
 - Vite
 - ESLint
+- Google Maps API
