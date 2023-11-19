@@ -1,6 +1,10 @@
 ## Summary
 
-This is my final project that I made in order to pass SoftUni's React course. It's a SPA Library app with adding and editing books in a catalog, my book favourites list and Firebase authentication. If you are a logged in user, you can add books, edit and delete your books from their Details page. Also you can add books that are not created from you to your book list.
+This is my final project that I made in order to pass SoftUni's React course. It's a SPA Library app with adding and editing books in a catalog, my book favourites list, Firebase authentication and it uses SoftUni's Practice Server. If you are a logged in user, you can add books, edit and delete your books from their Details page. Also you can add books that are not created from you to your book list.
+
+## Deployment
+
+The client application is deployed to Firebase. First you should run the server locally as explained in the 5th point of [setup](#setup). Then you can access the app from `https://library-a9970.web.app/`.
 
 ## Environment variables
 
@@ -30,7 +34,7 @@ npm install
 npm run dev
 ```
 
-5. Start the back-end from the server folder
+5. Start the back-end from the server folder, the server will be located at `http://localhost:3030`
 
 ```bash
 npm start

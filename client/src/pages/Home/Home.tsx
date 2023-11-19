@@ -14,7 +14,7 @@ export const Home: FC = () => {
                 <Typography variant='h2' sx={{ alignSelf: 'center' }}>
                     Welcome to the Library!
                 </Typography>
-                <Map zoom={18} center={position}>
+                <Map zoom={19} center={position}>
                     <Marker position={position} />
                 </Map>
             </section>
