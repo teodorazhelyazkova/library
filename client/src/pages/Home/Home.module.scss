@@ -1,5 +1,8 @@
 .Home {
     display: flex;
+    flex-direction: column;
+    gap: 2rem;
     justify-content: center;
     margin-top: 10rem;
+    height: 75vh;
 }
