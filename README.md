@@ -1,10 +1,10 @@
 ## Summary
 
-This is my final project that I made in order to pass SoftUni's React course. It's a SPA Library app with adding and editing books in a catalog, my book favourites list, Firebase authentication and it uses SoftUni's Practice Server. If you are a logged in user, you can add books, edit and delete your books from their Details page. Also you can add books that are not created from you to your book list.
+This is the final project that I made in order to pass SoftUni's React course. It's a Single Page Application Library with adding and editing books in a catalog, my book favourites list, Firebase authentication, and a map from Google Maps API. It uses SoftUni's Practice Server. If you are a logged-in user, you can add books, edit, and delete your books from their Details page. Also, you can add books that are not created by you to your book list.
 
 ## Deployment
 
-The client application is deployed to Firebase. First you should run the server locally as explained in the 5th point of [setup](#setup). Then you can access the app from `https://library-a9970.web.app/`.
+The client application is deployed to Firebase. First, you should run the server locally as explained in the 5th point of the [Setup](#setup) section. Then you can access the app from `https://library-a9970.web.app/`
 
 ## Environment variables
 
@@ -14,13 +14,13 @@ The client application is deployed to Firebase. First you should run the server 
 
 ## Setup
 
-1. Copy environment variables file template
+1. Copy the environment variables file template
 
 ```bash
 cp example.env .env
 ```
 
-2. Fill `.env` file with actual environment variables accordingly to [reference](#environment-variables). You have to generate your personal Google Maps API key on their website.
+2. Fill the `.env` file with actual environment variables according to the [Environment variables](#environment-variables) section. You have to generate your personal Google Maps API key on their website
 
 3. Install the dependencies in the client folder with Node.js v18.14.0
 
