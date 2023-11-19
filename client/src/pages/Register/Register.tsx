@@ -1,4 +1,4 @@
-import { FC, useCallback, useContext, useState } from 'react';
+import React, { FC, useCallback, useContext, useState } from 'react';
 import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import { CATALOG_PATH, LOGIN_PATH } from '../../constants/paths';
 import styles from './Register.module.scss';
@@ -8,8 +8,9 @@ import { createUserWithEmailAndPassword, UserCredential } from '@firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { getIdToken } from 'firebase/auth';
 import { rootStoreContext } from '../../App.tsx';
+import { observer } from 'mobx-react-lite';
 
-export const Register: FC = () => {
+export const Register: FC = observer(() => {
     const rootStore = useContext(rootStoreContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
@@ -29,12 +30,15 @@ export const Register: FC = () => {
         } else {
             createUserWithEmailAndPassword(auth, email, password)
                 .then(async (authUser: UserCredential) => {
-                    if (!authUser) return;
+                    if (!authUser) {
+                        return;
+                    }
 
                     const accessToken = await getIdToken(authUser.user);
                     localStorage.setItem('accessToken', accessToken);
 
                     rootStore.authStore.setUserEmail(authUser.user.email);
+                    localStorage.setItem('user', rootStore.authStore.userEmail!);
 
                     navigate(CATALOG_PATH);
                 })
@@ -48,6 +52,8 @@ export const Register: FC = () => {
                         error.code === 'auth/weak-password'
                     ) {
                         setInputError('Invalid email address or password');
+                    } else {
+                        setInputError('Something went wrong');
                     }
                 });
         }
@@ -132,4 +138,4 @@ export const Register: FC = () => {
             </Box>
         </Container>
     );
-};
+});

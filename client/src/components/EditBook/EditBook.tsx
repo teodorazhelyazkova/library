@@ -64,6 +64,7 @@ export const EditBook: FC = observer(() => {
                                 id='book'
                                 label='Book'
                                 name='book'
+                                type='text'
                                 inputRef={titleRef}
                                 defaultValue={bookDetails.title}
                                 error={titleError}
@@ -77,7 +78,7 @@ export const EditBook: FC = observer(() => {
                                 fullWidth
                                 name='author'
                                 label='Author'
-                                type='author'
+                                type='text'
                                 id='author'
                                 inputRef={authorRef}
                                 defaultValue={bookDetails.author}

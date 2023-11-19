@@ -21,9 +21,11 @@ export const Nav: FC = observer(() => {
         auth.signOut();
 
         rootStore.authStore.resetUserEmail();
+        rootStore.booksStore.setMyBookList([]);
 
         localStorage.removeItem('accessToken');
-    }, [rootStore.authStore]);
+        localStorage.removeItem('user');
+    }, [rootStore.authStore, rootStore.booksStore]);
 
     return (
         <AppBar position='fixed' color='primary'>
@@ -34,23 +36,13 @@ export const Nav: FC = observer(() => {
                 }}
             >
                 <Link to={HOME_PATH}>
-                    <Box
-                        component='img'
-                        sx={{ width: '8rem', paddingRight: { xs: 1, md: 2 } }}
-                        src='/books.png'
-                        alt='Library'
-                    />
+                    <Box component='img' sx={{ width: '8rem' }} src='/books.png' alt='Library' />
                 </Link>
 
-                <Stack
-                    direction='row'
-                    spacing={2}
-                    sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}
-                    alignItems='center'
-                >
+                <Stack direction='row' spacing={2} sx={{ flexGrow: 1 }} alignItems='center'>
                     <List
                         sx={{
-                            display: { xs: 'none', md: 'flex' },
+                            display: { xs: 'flex' },
                         }}
                         component='nav'
                         aria-label='navigation'

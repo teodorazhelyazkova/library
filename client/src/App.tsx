@@ -28,6 +28,8 @@ import { baseTheme } from './styles/theme';
 import { AddBook } from './pages/AddBook/AddBook';
 import { EditBook } from './components/EditBook/EditBook';
 import { RootStore } from './stores/RootStore';
+import { PrivateRoute } from './components/PrivateRoute/PrivateRoute';
+import { NotFound } from './pages/NotFound/NotFound';
 
 const rootStore = new RootStore();
 export const rootStoreContext = createContext(rootStore);
@@ -39,10 +41,32 @@ const App: FC = observer(() => {
             <Route path={REGISTER_PATH} element={<Register />} />
             <Route path={LOGIN_PATH} element={<Login />} />
             <Route path={CATALOG_PATH} element={<Catalog />} />
-            <Route path={ADD_BOOK_PATH} element={<AddBook />} />
-            <Route path={EDIT_BOOK_PATH} element={<EditBook />} />
-            <Route path={MY_LIST_PATH} element={<MyList />} />
+            <Route
+                path={ADD_BOOK_PATH}
+                element={
+                    <PrivateRoute>
+                        <AddBook />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path={EDIT_BOOK_PATH}
+                element={
+                    <PrivateRoute>
+                        <EditBook />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path={MY_LIST_PATH}
+                element={
+                    <PrivateRoute>
+                        <MyList />
+                    </PrivateRoute>
+                }
+            />
             <Route path={BOOK_DETAILS_PATH} element={<Book />} />
+            <Route path='*' element={<NotFound />} />
         </Route>,
     );
     const router = createBrowserRouter(routesConfig);

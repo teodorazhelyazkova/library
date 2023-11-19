@@ -30,9 +30,9 @@ export const Book = observer(() => {
 
     const isCreator = bookDetails.creator === rootStore.authStore.userEmail;
     const deleteHandler = async () => {
+        rootStore.booksStore.deleteBook(params.id!);
         navigate(CATALOG_PATH);
         await bookService.deleteBook(params.id!);
-        rootStore.booksStore.deleteBook(params.id!);
     };
 
     return (

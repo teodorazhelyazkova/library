@@ -7,8 +7,9 @@ import styles from './Login.module.scss';
 import { getIdToken, signInWithEmailAndPassword, UserCredential } from 'firebase/auth';
 import { rootStoreContext } from '../../App.tsx';
 import { auth } from '../../firebase.ts';
+import { observer } from 'mobx-react-lite';
 
-export const Login: FC = () => {
+export const Login: FC = observer(() => {
     const rootStore = useContext(rootStoreContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState<string>('');
@@ -24,12 +25,19 @@ export const Login: FC = () => {
 
         signInWithEmailAndPassword(auth, email, password)
             .then(async (authUser: UserCredential) => {
-                if (!authUser) return;
+                if (!authUser) {
+                    return;
+                }
 
                 const accessToken = await getIdToken(authUser.user);
                 localStorage.setItem('accessToken', accessToken);
 
                 rootStore.authStore.setUserEmail(authUser.user.email);
+                localStorage.setItem('user', rootStore.authStore.userEmail!);
+                const bookList = localStorage.getItem(rootStore.authStore.userEmail!);
+                if (bookList) {
+                    rootStore.booksStore.setMyBookList(JSON.parse(bookList));
+                }
 
                 navigate(CATALOG_PATH);
             })
@@ -40,9 +48,12 @@ export const Login: FC = () => {
                     setInputError('No user with this email and password');
                 } else if (
                     error.code === 'auth/invalid-email' ||
-                    error.code === 'auth/wrong-password'
+                    error.code === 'auth/wrong-password' ||
+                    error.code === 'auth/invalid-login-credentials'
                 ) {
                     setInputError('Invalid email address or password');
+                } else {
+                    setInputError('Something went wrong');
                 }
             });
     };
@@ -113,4 +124,4 @@ export const Login: FC = () => {
             </Box>
         </Container>
     );
-};
+});

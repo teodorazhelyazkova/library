@@ -21,7 +21,6 @@ export const getAll = async (): Promise<IBook[]> => {
         };
     });
 
-    console.log(books);
     return books;
 };
 

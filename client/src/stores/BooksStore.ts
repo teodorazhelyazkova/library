@@ -11,6 +11,7 @@ export class BooksStore {
             books: observable,
             myBookList: observable,
 
+            setMyBookList: action.bound,
             setBooks: action.bound,
             addBook: action.bound,
             deleteBook: action.bound,
@@ -29,6 +30,10 @@ export class BooksStore {
 
     public setBooks(books: IBook[]) {
         this.books = books;
+    }
+
+    public setMyBookList(books: IBook[]) {
+        this.myBookList = books;
     }
 
     public setBook(book: IBook, index: number) {
@@ -57,6 +62,15 @@ export class BooksStore {
     }
 
     public addToMyBookList(item: IBook) {
+        const accessToken = localStorage.getItem('accessToken')!;
+        const user = localStorage.getItem('user')!;
+
+        if (!accessToken) {
+            return;
+        }
+
+        this.myBookList = JSON.parse(localStorage.getItem(user) || '[]');
+
         const existingBook = this.myBookList.find((book: IBook) => book._id === item._id);
 
         if (existingBook) {
@@ -64,9 +78,25 @@ export class BooksStore {
         }
 
         this.myBookList.push(item);
+        localStorage.setItem(user, JSON.stringify(this.myBookList));
     }
 
     public removeFromMyBookList(bookId: string) {
-        this.myBookList = this.myBookList.filter((book: IBook) => book._id !== bookId);
+        const accessToken = localStorage.getItem('accessToken')!;
+
+        if (!accessToken) {
+            return;
+        }
+
+        const user = localStorage.getItem('user')!;
+        const favoritesJSON = localStorage.getItem(user);
+
+        if (!favoritesJSON) {
+            return;
+        }
+
+        this.myBookList = JSON.parse(favoritesJSON).filter((book: IBook) => book._id !== bookId);
+
+        localStorage.setItem(user, JSON.stringify(this.myBookList));
     }
 }
