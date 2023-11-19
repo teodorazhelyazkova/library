@@ -21,19 +21,19 @@ cp example.env .env
 3. Install the dependencies in the client folder with Node.js v18.14.0
 
 ```bash
-$ npm install
+npm install
 ```
 
 4. Start the client dev server, the application will be available at `http://localhost:5173/`
 
 ```bash
-$ npm run dev
+npm run dev
 ```
 
 5. Start the back-end from the server folder
 
 ```bash
-$ npm start
+npm start
 ```
 
 ## Technical stack
